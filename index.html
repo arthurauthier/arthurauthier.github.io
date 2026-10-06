@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="[Portfolio de Prénom Nom — étudiant ingénieur en informatique spécialisé en cybersécurité]"
+    >
+
+    <title>[Prénom Nom] — [Ingénieur Informatique | Cybersécurité]</title>
+
+    <!-- =========================================================
+         GOOGLE FONTS
+         ========================================================= -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =========================================================
+         THREE.JS — VERSION FIXÉE
+         ========================================================= -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"
+        defer>
+    </script>
+
+    <style>
+
+        /* =====================================================
+           VARIABLES
+           ===================================================== */
+
+        :root {
+            --accent: #38bdf8;
+
+            --background: #05070a;
+            --surface: #0b0f14;
+            --surface-light: #111820;
+
+            --text: #f5f7fa;
+            --text-muted: #aab3bd;
+            --border: #202933;
+
+            --max-width: 1100px;
+        }
+
+
+        /* =====================================================
+           RESET
+           ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+
+            font-family:
+                "Manrope",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           TYPOGRAPHIE
+           ===================================================== */
+
+        h1,
+        h2,
+        h3,
+        h4,
+        nav {
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            line-height: 0.95;
+            letter-spacing: -0.06em;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            line-height: 1.2;
+        }
+
+        p {
+            color: var(--text-muted);
+        }
+
+
+        /* =====================================================
+           CANVAS THREE.JS
+           ===================================================== */
+
+        #background-canvas {
+            position: fixed;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            z-index: -2;
+
+            pointer-events: none;
+        }
+
+        .canvas-overlay {
+            position: fixed;
+            inset: 0;
+
+            z-index: -1;
+
+            pointer-events: none;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(5, 7, 10, 0.45),
+                    rgba(5, 7, 10, 0.90)
+                );
+        }
+
+
+        /* =====================================================
+           CURSEUR — LUEUR UNIQUEMENT
+           ===================================================== */
+
+        #pointer-glow {
+            position: fixed;
+
+            width: 260px;
+            height: 260px;
+
+            border-radius: 50%;
+
+            pointer-events: none;
+
+            z-index: 0;
+
+            transform: translate(-50%, -50%);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(56, 189, 248, 0.13) 0%,
+                    rgba(56, 189, 248, 0.06) 30%,
+                    rgba(56, 189, 248, 0) 70%
+                );
+
+            opacity: 0;
+
+            transition: opacity 0.3s ease;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+           ===================================================== */
+
+        header {
+            position: relative;
+
+            width: 100%;
+
+            padding: 28px 30px;
+
+            z-index: 10;
+        }
+
+        .nav {
+            max-width: var(--max-width);
+
+            margin: auto;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: "Space Grotesk", sans-serif;
+
+            font-weight: 700;
+
+            font-size: 1.1rem;
+
+            letter-spacing: -0.03em;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav {
+            display: flex;
+
+            gap: 28px;
+
+            font-size: 0.9rem;
+
+            color: var(--text-muted);
+        }
+
+        nav a {
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+
+        /* =====================================================
+           HERO
+           ===================================================== */
+
+        .hero {
+            min-height: 92vh;
+
+            max-width: var(--max-width);
+
+            margin: auto;
+
+            padding:
+                100px 30px
+                120px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+        .eyebrow {
+            color: var(--accent);
+
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                sans-serif;
+
+            font-size: 0.85rem;
+
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.14em;
+
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            max-width: 900px;
+
+            margin-bottom: 35px;
+        }
+
+        .hero h1 .accent {
+            color: var(--accent);
+        }
+
+        .hero-description {
+            max-width: 650px;
+
+            font-size: 1.1rem;
+
+            line-height: 1.8;
+
+            margin-bottom: 40px;
+        }
+
+        .hero-actions {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 14px;
+        }
+
+        .button {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-height: 48px;
+
+            padding: 12px 22px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 6px;
+
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                sans-serif;
+
+            font-size: 0.9rem;
+
+            transition:
+                border-color 0.2s ease,
+                color 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .button.primary {
+            background: var(--accent);
+
+            color: #061018;
+
+            border-color: var(--accent);
+
+            font-weight: 700;
+        }
+
+        .button:hover {
+            border-color: var(--accent);
+
+            color: var(--accent);
+        }
+
+        .button.primary:hover {
+            color: #061018;
+
+            background: #72d3fa;
+        }
+
+
+        /* =====================================================
+           CONTENU
+           ===================================================== */
+
+        main {
+            position: relative;
+
+            background: rgba(5, 7, 10, 0.96);
+
+            border-top:
+                1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        section {
+            max-width: var(--max-width);
+
+            margin: auto;
+
+            padding:
+                120px 30px;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-number {
+            color: var(--accent);
+
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                sans-serif;
+
+            font-size: 0.8rem;
+
+            font-weight: 600;
+
+            margin-bottom: 16px;
+        }
+
+
+        /* =====================================================
+           A PROPOS
+           ===================================================== */
+
+        .about-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1.5fr;
+
+            gap: 80px;
+        }
+
+        .about-intro {
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                sans-serif;
+
+            font-size: 1.5rem;
+
+            line-height: 1.35;
+
+            color: var(--text);
+        }
+
+        .about-content {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 24px;
+        }
+
+        .about-content p {
+            max-width: 650px;
+        }
+
+
+        /* =====================================================
+           COMPETENCES
+           ===================================================== */
+
+        .skills {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
+        }
+
+        .skill {
+            padding: 28px;
+
+            border: 1px solid var(--border);
+
+            background: rgba(11, 15, 20, 0.8);
+        }
+
+        .skill h3 {
+            margin-bottom: 12px;
+        }
+
+        .skill p {
+            font-size: 0.9rem;
+        }
+
+
+        /* =====================================================
+           PROJETS
+           ===================================================== */
+
+        .projects {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 18px;
+        }
+
+        .project {
+            display: grid;
+
+            grid-template-columns:
+                80px 1fr auto;
+
+            gap: 30px;
+
+            align-items: start;
+
+            padding: 30px;
+
+            border: 1px solid var(--border);
+
+            background: rgba(11, 15, 20, 0.8);
+
+            transition:
+                border-color 0.2s ease;
+        }
+
+        .project:hover {
+            border-color: var(--accent);
+        }
+
+        .project-number {
+            color: var(--accent);
+
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                sans-serif;
+
+            font-weight: 600;
+        }
+
+        .project-content h3 {
+            margin-bottom: 10px;
+        }
+
+        .project-content p {
+            max-width: 620px;
+
+            font-size: 0.95rem;
+
+            margin-bottom: 18px;
+        }
+
+        .technologies {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+        }
+
+        .technology {
+            font-size: 0.75rem;
+
+            padding: 5px 9px;
+
+            border: 1px solid var(--border);
+
+            color: var(--text-muted);
+        }
+
+        .project-link {
+            color: var(--text-muted);
+
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                sans-serif;
+
+            font-size: 0.85rem;
+
+            white-space: nowrap;
+        }
+
+        .project-link:hover {
+            color: var(--accent);
+
+            text-decoration: underline;
+
+            text-underline-offset: 4px;
+        }
+
+
+        /* =====================================================
+           PARCOURS
+           ===================================================== */
+
+        .timeline {
+            display: flex;
+
+            flex-direction: column;
+
+            border-left: 1px solid var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+
+            padding:
+                0
+                0
+                50px
+                35px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: "";
+
+            position: absolute;
+
+            left: -5px;
+
+            top: 5px;
+
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: var(--accent);
+        }
+
+        .timeline-date {
+            color: var(--accent);
+
+            font-size: 0.8rem;
+
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                sans-serif;
+
+            margin-bottom: 8px;
+        }
+
+        .timeline-item h3 {
+            margin-bottom: 8px;
+        }
+
+
+        /* =====================================================
+           CONTACT
+           ===================================================== */
+
+        .contact {
+            text-align: center;
+
+            padding-top: 150px;
+            padding-bottom: 150px;
+        }
+
+        .contact h2 {
+            max-width: 800px;
+
+            margin:
+                0 auto 25px;
+        }
+
+        .contact p {
+            max-width: 550px;
+
+            margin:
+                0 auto 35px;
+        }
+
+        .contact-links {
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 20px;
+        }
+
+        .contact-links a {
+            color: var(--text-muted);
+
+            font-family:
+                "Space Grotesk",
+                system-ui,
+                sans-serif;
+        }
+
+        .contact-links a:hover {
+            color: var(--accent);
+
+            text-decoration: underline;
+
+            text-underline-offset: 5px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        footer {
+            max-width: var(--max-width);
+
+            margin: auto;
+
+            padding:
+                30px;
+
+            border-top: 1px solid var(--border);
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            color: var(--text-muted);
+
+            font-size: 0.8rem;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 800px) {
+
+            header {
+                padding:
+                    22px 20px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero {
+                padding:
+                    80px 20px
+                    100px;
+            }
+
+            section {
+                padding:
+                    85px 20px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+
+                gap: 35px;
+            }
+
+            .skills {
+                grid-template-columns: 1fr;
+            }
+
+            .project {
+                grid-template-columns: 1fr;
+
+                gap: 15px;
+            }
+
+            .project-link {
+                display: inline-block;
+            }
+
+            footer {
+                flex-direction: column;
+
+                padding:
+                    25px 20px;
+            }
+        }
+
+
+        /* =====================================================
+           REDUCTION DES ANIMATIONS
+           ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+
+                animation-iteration-count: 1 !important;
+
+                transition-duration: 0.01ms !important;
+            }
+
+            #background-canvas {
+                display: none;
+            }
+
+            .canvas-overlay {
+                background:
+                    var(--background);
+            }
+
+            #pointer-glow {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================================================
+         FOND ANIMÉ
+         ========================================================= -->
+
+    <canvas id="background-canvas"></canvas>
+
+    <div class="canvas-overlay"></div>
+
+    <div id="pointer-glow"></div>
+
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
+    <header>
+
+        <div class="nav">
+
+            <a href="#" class="logo">
+                [PRÉNOM<span>.</span>NOM]
+            </a>
+
+            <nav aria-label="Navigation principale">
+
+                <a href="#about">À propos</a>
+
+                <a href="#skills">Compétences</a>
+
+                <a href="#projects">Projets</a>
+
+                <a href="#experience">Parcours</a>
+
+                <a href="#contact">Contact</a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         HERO
+         ========================================================= -->
+
+    <div class="hero">
+
+        <div class="eyebrow">
+            [Étudiant ingénieur · Informatique · Cybersécurité]
+        </div>
+
+        <h1>
+            [Construire.<br>
+            Sécuriser.<br>
+            <span class="accent">Innover.</span>]
+        </h1>
+
+        <p class="hero-description">
+            [Je suis étudiant en deuxième année d'école d'ingénieurs,
+            passionné par l'informatique et la cybersécurité. Je souhaite
+            développer des solutions fiables et contribuer à la protection
+            des systèmes et infrastructures numériques.]
+        </p>
+
+        <div class="hero-actions">
+
+            <a href="#projects" class="button primary">
+                Voir mes projets
+            </a>
+
+            <a href="#contact" class="button">
+                Me contacter
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         CONTENU PRINCIPAL
+         ========================================================= -->
+
+    <main>
+
+
+        <!-- =====================================================
+             À PROPOS
+             ===================================================== -->
+
+        <section id="about">
+
+            <div class="section-header">
+
+                <div class="section-number">
+                    01 — À PROPOS
+                </div>
+
+                <h2>
+                    [Qui suis-je ?]
+                </h2>
+
+            </div>
+
+
+            <div class="about-grid">
+
+                <div class="about-intro">
+
+                    [Un futur ingénieur
+                    tourné vers la
+                    cybersécurité.]
+                    
+                </div>
+
+
+                <div class="about-content">
+
+                    <p>
+                        [Actuellement étudiant en deuxième année
+                        d'école d'ingénieurs CESI, je développe
+                        progressivement mes compétences en
+                        informatique, programmation, systèmes et réseaux.]
+                    </p>
+
+                    <p>
+                        [Mon objectif est de me spécialiser dans
+                        la sécurité des systèmes d'information et
+                        de participer à des projets permettant de
+                        protéger des infrastructures sensibles.]
+                    </p>
+
+                    <p>
+                        [Je m'intéresse particulièrement à la
+                        cybersécurité, aux réseaux, aux systèmes
+                        Linux et au développement logiciel.]
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             COMPÉTENCES
+             ===================================================== -->
+
+        <section id="skills">
+
+            <div class="section-header">
+
+                <div class="section-number">
+                    02 — COMPÉTENCES
+                </div>
+
+                <h2>
+                    [Ce que je construis]
+                </h2>
+
+            </div>
+
+
+            <div class="skills">
+
+
+                <article class="skill">
+
+                    <h3>
+                        [Cybersécurité]
+                    </h3>
+
+                    <p>
+                        [Analyse des risques, sécurité des systèmes,
+                        bonnes pratiques, sensibilisation et
+                        découverte des techniques de défense.]
+                    </p>
+
+                </article>
+
+
+                <article class="skill">
+
+                    <h3>
+                        [Développement]
+                    </h3>
+
+                    <p>
+                        [C, Python, C++, algorithmique,
+                        structures de données et développement
+                        de programmes.]
+                    </p>
+
+                </article>
+
+
+                <article class="skill">
+
+                    <h3>
+                        [Systèmes & Réseaux]
+                    </h3>
+
+                    <p>
+                        [Linux, réseaux TCP/IP, Git, GitHub,
+                        administration système et découverte
+                        des infrastructures informatiques.]
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PROJETS
+             ===================================================== -->
+
+        <section id="projects">
+
+            <div class="section-header">
+
+                <div class="section-number">
+                    03 — PROJETS
+                </div>
+
+                <h2>
+                    [Projets sélectionnés]
+                </h2>
+
+            </div>
+
+
+            <div class="projects">
+
+
+                <!-- PROJET 01 -->
+
+                <article class="project">
+
+                    <div class="project-number">
+                        01
+                    </div>
+
+                    <div class="project-content">
+
+                        <h3>
+                            [Sentinel — Analyse réseau]
+                        </h3>
+
+                        <p>
+                            [Création d'un outil permettant de
+                            surveiller et analyser le trafic réseau
+                            afin d'identifier des comportements
+                            inhabituels. Le projet met l'accent sur
+                            la compréhension des protocoles et la
+                            détection d'événements suspects.]
+                        </p>
+
+                        <div class="technologies">
+
+                            <span class="technology">
+                                [Python]
+                            </span>
+
+                            <span class="technology">
+                                [Linux]
+                            </span>
+
+                            <span class="technology">
+                                [TCP/IP]
+                            </span>
+
+                            <span class="technology">
+                                [Git]
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="https://github.com/example/sentinel-network"
+                        class="project-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        [GitHub ↗]
+                    </a>
+
+                </article>
+
+
+                <!-- PROJET 02 -->
+
+                <article class="project">
+
+                    <div class="project-number">
+                        02
+                    </div>
+
+                    <div class="project-content">
+
+                        <h3>
+                            [SecureVault — Gestionnaire sécurisé]
+                        </h3>
+
+                        <p>
+                            [Développement d'une application permettant
+                            de stocker et gérer des informations sensibles
+                            localement. Le projet explore le chiffrement,
+                            la gestion des mots de passe et les principes
+                            de sécurité applicative.]
+                        </p>
+
+                        <div class="technologies">
+
+                            <span class="technology">
+                                [C]
+                            </span>
+
+                            <span class="technology">
+                                [Cryptographie]
+                            </span>
+
+                            <span class="technology">
+                                [Linux]
+                            </span>
+
+                            <span class="technology">
+                                [GitHub]
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="https://github.com/example/secure-vault"
+                        class="project-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        [GitHub ↗]
+                    </a>
+
+                </article>
+
+
+                <!-- PROJET 03 -->
+
+                <article class="project">
+
+                    <div class="project-number">
+                        03
+                    </div>
+
+                    <div class="project-content">
+
+                        <h3>
+                            [CyberLab — Environnement de test]
+                        </h3>
+
+                        <p>
+                            [Mise en place d'un environnement Linux
+                            permettant d'expérimenter différentes
+                            configurations réseau et mécanismes de
+                            sécurité dans un cadre contrôlé.]
+                        </p>
+
+                        <div class="technologies">
+
+                            <span class="technology">
+                                [Linux]
+                            </span>
+
+                            <span class="technology">
+                                [Virtualisation]
+                            </span>
+
+                            <span class="technology">
+                                [Réseaux]
+                            </span>
+
+                            <span class="technology">
+                                [Bash]
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="https://github.com/example/cyber-lab"
+                        class="project-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        [GitHub ↗]
+                    </a>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PARCOURS
+             ===================================================== -->
+
+        <section id="experience">
+
+            <div class="section-header">
+
+                <div class="section-number">
+                    04 — PARCOURS
+                </div>
+
+                <h2>
+                    [Mon parcours]
+                </h2>
+
+            </div>
+
+
+            <div class="timeline">
+
+
+                <article class="timeline-item">
+
+                    <div class="timeline-date">
+                        [2025 — Aujourd'hui]
+                    </div>
+
+                    <h3>
+                        [CESI — École d'ingénieurs]
+                    </h3>
+
+                    <p>
+                        [Deuxième année — spécialité Informatique.
+                        Développement, systèmes, réseaux,
+                        algorithmique et projets techniques.]
+                    </p>
+
+                </article>
+
+
+                <article class="timeline-item">
+
+                    <div class="timeline-date">
+                        [2025]
+                    </div>
+
+                    <h3>
+                        [Baccalauréat général — Mention Bien]
+                    </h3>
+
+                    <p>
+                        [Spécialités Physique-Chimie et NSI.
+                        Développement d'une première culture
+                        scientifique et informatique.]
+                    </p>
+
+                </article>
+
+
+                <article class="timeline-item">
+
+                    <div class="timeline-date">
+                        [Aujourd'hui]
+                    </div>
+
+                    <h3>
+                        [Objectif professionnel]
+                    </h3>
+
+                    <p>
+                        [Me spécialiser dans la cybersécurité
+                        et évoluer vers des fonctions liées à
+                        la sécurité des systèmes d'information.]
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CONTACT
+             ===================================================== -->
+
+        <section id="contact" class="contact">
+
+            <div class="section-number">
+                05 — CONTACT
+            </div>
+
+            <h2>
+                [Construisons quelque chose de sécurisé.]
+            </h2>
+
+            <p>
+                [Vous recherchez un étudiant ingénieur motivé
+                par la cybersécurité et les systèmes informatiques ?
+                N'hésitez pas à me contacter.]
+            </p>
+
+
+            <div class="contact-links">
+
+                <a href="mailto:[email@example.com]">
+                    [Email]
+                </a>
+
+                <a
+                    href="https://github.com/[username]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    [GitHub]
+                </a>
+
+                <a
+                    href="https://www.linkedin.com/in/[username]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    [LinkedIn]
+                </a>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer>
+
+        <span>
+            © [2026] [Prénom Nom]
+        </span>
+
+        <span>
+            [Étudiant ingénieur · Informatique · Cybersécurité]
+        </span>
+
+    </footer>
+
+
+    <!-- =========================================================
+         THREE.JS
+         ========================================================= -->
+
+    <script>
+
+        /*
+         * ======================================================
+         * VÉRIFICATION DES CONDITIONS
+         * ======================================================
+         */
+
+        const canvas = document.getElementById("background-canvas");
+        const pointerGlow = document.getElementById("pointer-glow");
+
+        const reduceMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        const isTouchDevice =
+            window.matchMedia("(pointer: coarse)").matches ||
+            "ontouchstart" in window;
+
+        let renderer;
+        let scene;
+        let camera;
+        let points;
+        let lines;
+
+        let animationFrame;
+
+        let isPageVisible = !document.hidden;
+
+
+        /*
+         * ======================================================
+         * SI LES ANIMATIONS SONT DÉSACTIVÉES
+         * ======================================================
+         */
+
+        if (reduceMotion) {
+
+            canvas.style.display = "none";
+
+        } else if (
+            !window.WebGLRenderingContext ||
+            !THREE
+        ) {
+
+            canvas.style.display = "none";
+
+        } else {
+
+            initializeBackground();
+
+        }
+
+
+        /*
+         * ======================================================
+         * INITIALISATION
+         * ======================================================
+         */
+
+        function initializeBackground() {
+
+            try {
+
+                renderer = new THREE.WebGLRenderer({
+                    canvas: canvas,
+                    antialias: true,
+                    alpha: true
+                });
+
+                renderer.setPixelRatio(
+                    Math.min(window.devicePixelRatio, 2)
+                );
+
+                renderer.setSize(
+                    window.innerWidth,
+                    window.innerHeight
+                );
+
+
+                /*
+                 * SCÈNE
+                 */
+
+                scene = new THREE.Scene();
+
+
+                /*
+                 * CAMÉRA
+                 */
+
+                camera = new THREE.PerspectiveCamera(
+                    55,
+                    window.innerWidth / window.innerHeight,
+                    0.1,
+                    100
+                );
+
+                camera.position.z = 7;
+
+
+                /*
+                 * PARTICULES
+                 */
+
+                const particleCount = 150;
+
+                const positions = new Float32Array(
+                    particleCount * 3
+                );
+
+                const particleData = [];
+
+                for (
+                    let i = 0;
+                    i < particleCount;
+                    i++
+                ) {
+
+                    const x =
+                        (Math.random() - 0.5) * 12;
+
+                    const y =
+                        (Math.random() - 0.5) * 7;
+
+                    const z =
+                        (Math.random() - 0.5) * 4;
+
+                    positions[i * 3] = x;
+                    positions[i * 3 + 1] = y;
+                    positions[i * 3 + 2] = z;
+
+                    particleData.push({
+                        x: x,
+                        y: y,
+                        z: z,
+
+                        speed:
+                            0.0005 +
+                            Math.random() * 0.001,
+
+                        offset:
+                            Math.random() * Math.PI * 2
+                    });
+
+                }
+
+
+                /*
+                 * GÉOMÉTRIE DES POINTS
+                 */
+
+                const pointGeometry =
+                    new THREE.BufferGeometry();
+
+                pointGeometry.setAttribute(
+                    "position",
+                    new THREE.BufferAttribute(
+                        positions,
+                        3
+                    )
+                );
+
+
+                /*
+                 * MATÉRIAU DES POINTS
+                 */
+
+                const pointMaterial =
+                    new THREE.PointsMaterial({
+
+                        color: 0x38bdf8,
+
+                        size: 0.045,
+
+                        transparent: true,
+
+                        opacity: 0.75
+
+                    });
+
+
+                points =
+                    new THREE.Points(
+                        pointGeometry,
+                        pointMaterial
+                    );
+
+                scene.add(points);
+
+
+                /*
+                 * LIGNES ENTRE LES PARTICULES
+                 */
+
+                const linePositions = [];
+
+                const maxDistance = 1.5;
+
+                for (
+                    let i = 0;
+                    i < particleCount;
+                    i++
+                ) {
+
+                    for (
+                        let j = i + 1;
+                        j < particleCount;
+                        j++
+                    ) {
+
+                        const dx =
+                            particleData[i].x -
+                            particleData[j].x;
+
+                        const dy =
+                            particleData[i].y -
+                            particleData[j].y;
+
+                        const dz =
+                            particleData[i].z -
+                            particleData[j].z;
+
+                        const distance =
+                            Math.sqrt(
+                                dx * dx +
+                                dy * dy +
+                                dz * dz
+                            );
+
+                        if (distance < maxDistance) {
+
+                            linePositions.push(
+
+                                particleData[i].x,
+                                particleData[i].y,
+                                particleData[i].z,
+
+                                particleData[j].x,
+                                particleData[j].y,
+                                particleData[j].z
+
+                            );
+
+                        }
+
+                    }
+
+                }
+
+
+                /*
+                 * GÉOMÉTRIE DES LIGNES
+                 */
+
+                const lineGeometry =
+                    new THREE.BufferGeometry();
+
+                lineGeometry.setAttribute(
+                    "position",
+                    new THREE.Float32BufferAttribute(
+                        linePositions,
+                        3
+                    )
+                );
+
+
+                /*
+                 * MATÉRIAU DES LIGNES
+                 */
+
+                const lineMaterial =
+                    new THREE.LineBasicMaterial({
+
+                        color: 0x38bdf8,
+
+                        transparent: true,
+
+                        opacity: 0.12
+
+                    });
+
+
+                lines =
+                    new THREE.LineSegments(
+                        lineGeometry,
+                        lineMaterial
+                    );
+
+                scene.add(lines);
+
+
+                /*
+                 * REDIMENSIONNEMENT
+                 */
+
+                window.addEventListener(
+                    "resize",
+                    handleResize
+                );
+
+
+                /*
+                 * VISIBILITÉ DE L'ONGLET
+                 */
+
+                document.addEventListener(
+                    "visibilitychange",
+                    handleVisibilityChange
+                );
+
+
+                /*
+                 * POINTEUR
+                 */
+
+                if (!isTouchDevice) {
+
+                    window.addEventListener(
+                        "pointermove",
+                        handlePointerMove
+                    );
+
+                }
+
+
+                /*
+                 * ANIMATION
+                 */
+
+                animate();
+
+
+            } catch (error) {
+
+                console.warn(
+                    "WebGL indisponible :",
+                    error
+                );
+
+                canvas.style.display = "none";
+
+            }
+
+        }
+
+
+        /*
+         * ======================================================
+         * ANIMATION
+         * ======================================================
+         */
+
+        function animate(time) {
+
+            if (!isPageVisible) {
+
+                animationFrame = null;
+
+                return;
+
+            }
+
+            animationFrame =
+                requestAnimationFrame(animate);
+
+
+            if (!points || !lines) {
+                return;
+            }
+
+
+            /*
+             * Mouvement lent du réseau
+             */
+
+            points.rotation.y += 0.00025;
+
+            points.rotation.x += 0.00008;
+
+            lines.rotation.y += 0.00025;
+
+            lines.rotation.x += 0.00008;
+
+
+            /*
+             * Légère dérive verticale
+             */
+
+            points.position.y =
+                Math.sin(time * 0.00015) * 0.15;
+
+            lines.position.y =
+                Math.sin(time * 0.00015) * 0.15;
+
+
+            renderer.render(
+                scene,
+                camera
+            );
+
+        }
+
+
+        /*
+         * ======================================================
+         * REDIMENSIONNEMENT
+         * ======================================================
+         */
+
+        function handleResize() {
+
+            if (!renderer || !camera) {
+                return;
+            }
+
+            camera.aspect =
+                window.innerWidth /
+                window.innerHeight;
+
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(
+                window.innerWidth,
+                window.innerHeight
+            );
+
+        }
+
+
+        /*
+         * ======================================================
+         * VISIBILITÉ
+         * ======================================================
+         */
+
+        function handleVisibilityChange() {
+
+            isPageVisible =
+                !document.hidden;
+
+
+            if (
+                isPageVisible &&
+                !animationFrame
+            ) {
+
+                animate(
+                    performance.now()
+                );
+
+            }
+
+        }
+
+
+        /*
+         * ======================================================
+         * LUEUR DU POINTEUR
+         * ======================================================
+         */
+
+        function handlePointerMove(event) {
+
+            pointerGlow.style.opacity = "1";
+
+            pointerGlow.style.left =
+                event.clientX + "px";
+
+            pointerGlow.style.top =
+                event.clientY + "px";
+
+        }
+
+    </script>
+
+</body>
+</html>
