@@ -250,6 +250,60 @@
             color: var(--accent);
         }
 
+        .menu-toggle {
+            display: none;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: transparent;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle[aria-expanded="true"] {
+            transform: rotate(-90deg) scale(1.15);
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            margin: 5px 0;
+            background: var(--accent);
+        }
+
+        @media (max-width: 800px) {
+            .nav {
+                position: relative;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav nav {
+                display: none;
+                position: absolute;
+                top: calc(100% + 12px);
+                right: 0;
+                z-index: 20;
+                min-width: 200px;
+                padding: 12px;
+                flex-direction: column;
+                gap: 0;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                background: var(--surface);
+            }
+
+            .nav nav.is-open {
+                display: flex;
+            }
+
+            .nav nav a {
+                padding: 12px;
+            }
+        }
 
         /* =====================================================
            HERO
@@ -321,6 +375,37 @@
             flex-wrap: wrap;
 
             gap: 14px;
+        }
+
+        .media {
+            margin: -20px 0 40px;
+        }
+
+        .media h2 {
+            margin-bottom: 12px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .media-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .media-links a {
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--accent);
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .media-links a:hover {
+            background: var(--accent);
+            color: var(--text);
         }
 
         .button {
@@ -458,10 +543,17 @@
             gap: 20px;
         }
 
+        .cv-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
         .cv-preview {
             width: 100%;
         height: 700px;
         border: 1px solid var(--border);
+        border-radius: 6px;
         background: var(--surface);
         }
 
@@ -571,6 +663,7 @@
             padding: 30px;
 
             border: 1px solid var(--border);
+            border-radius: 6px;
 
             background: rgba(11, 15, 20, 0.8);
 
@@ -611,6 +704,7 @@
             flex-wrap: wrap;
 
             gap: 8px;
+
         }
 
         .technology {
@@ -619,8 +713,16 @@
             padding: 5px 9px;
 
             border: 1px solid var(--border);
+            border-radius: 6px;
 
-            color: var(--text-muted);
+            color: var(--accent);
+
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .technology:hover {
+            background: var(--accent);
+            color: var(--text);
         }
 
         .project-link {
@@ -796,10 +898,6 @@
                     22px 20px;
             }
 
-            nav {
-                display: none;
-            }
-
             .hero {
                 padding:
                     80px 20px
@@ -903,21 +1001,25 @@
                 Arthur<span>.AUTHIER</span>
             </a>
 
-            <nav aria-label="Navigation principale">
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-label="Ouvrir le menu"
+                aria-expanded="false"
+                aria-controls="main-menu"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-                <a href="#cv">CV</a>
-
+            <nav id="main-menu" aria-label="Navigation principale">
                 <a href="#about">À propos</a>
-
                 <a href="#skills">Compétences</a>
-
                 <a href="#projects">Projets</a>
-
                 <a href="#experience">Parcours</a>
-
+                <a href="#cv">CV</a>
                 <a href="#contact">Contact</a>
-
-
 
             </nav>
 
@@ -950,6 +1052,20 @@
             <span class="highlight">Lauréat du Prix STEM FOR ALL de Thales 2026.</span>
         </p>
 
+        <div class="media">
+            <h2>Dans les médias</h2>
+            <div class="media-links">
+                <a href="https://toulouse.cesi.fr/fr/actualites/un-etudiant-de-cesi-toulouse-laureat-du-prix-thales-stem-for-all/" target="_blank" rel="noopener noreferrer">
+                    Article de CESI NEWS
+                </a>
+
+                <a href="https://www.linkedin.com/posts/cesi-cesitoulouse-thalessolidarity-ugcPost-7513541200742641665-N2xQ/?utm_source=social_share_send&utm_medium=android_app&rcm=ACoAAGP71r4Bimge6FBM2Gw8WPz7O_-CmqAK-Xo" target="_blank" rel="noopener noreferrer">
+                    Article de LinkedIn CESI
+                </a>
+
+            </div>
+        </div>
+
         <div class="hero-actions">
 
             <a href="#projects" class="button primary">
@@ -975,25 +1091,6 @@
         <!-- =====================================================
              À PROPOS
              ===================================================== -->
-
-        <section id="cv" aria-labelledby="cv-title">
-            <div class="section-header">
-                <div class="section-number">00 — CV</div>
-                <h2 id="cv-title">Mon curriculum vitæ</h2>
-            </div>
-
-            <div class="cv-content">
-                <p>
-                    Consultez mon parcours, mes compétences et mes expériences
-                    dans mon CV.
-                </p>
-
-                <a href="cv.html" class="button primary" target="_blank">
-                    Voir mon CV
-                </a>
-
-            </div>
-        </section>
 
         <section id="about">
 
@@ -1141,8 +1238,8 @@
                     <p>
                         Le projet consistait à <span class="highlight">simuler le fonctionnement d’un coffre de banque sécurisé</span> à l’aide de cartes bancaires et de circuits logiques.
                         L’objectif était de permettre l’accès au coffre uniquement lorsqu’une carte et son code correspondent au circuit logique programmé.
-                        Le système intègre également des questions de sécurité afin de renforcer l’authentification. En cas de plusieurs erreurs consécutives, un système de verrouillage est activé afin de bloquer temporairement l’accès au coffre.
-                        Les principales étapes étaient de concevoir les circuits logiques, définir les codes des cartes, réaliser le montage électronique, programmer les mécanismes de sécurité, tester les différentes combinaisons et vérifier le verrouillage en cas d’erreurs répétées.
+                        Le <span class="highlight">système intègre également des questions de sécurité</span> afin de renforcer l’authentification. En cas de plusieurs erreurs consécutives, un système de verrouillage est activé afin de bloquer temporairement l’accès au coffre.
+                        Les principales étapes étaient de <span class="highlight">concevoir</span> les circuits logiques, <span class="highlight">définir</span> les codes des cartes, <span class="highlight">réaliser</span> le montage électronique, <span class="highlight">programmer</span> les mécanismes de sécurité, <span class="highlight">tester</span> les différentes combinaisons et <span class="highlight">vérifier</span> le verrouillage en cas d’erreurs répétées.
 
                     </p>
                     <div class="technologies">
@@ -1164,8 +1261,8 @@
                     <h3>Fast And Furious</h3>
                     <p>
                         Le projet consistait à <span class="highlight">étudier le mouvement d’une voiture sur un parcours</span> comprenant une pente, une boucle et un saut au-dessus d’un ravin.
-                        L’objectif était de modéliser le mouvement de la voiture à l’aide des lois de la mécanique, puis de réaliser des simulations numériques avec Python et SciPy afin de déterminer sa vitesse, sa trajectoire et les conditions nécessaires pour réussir le parcours.
-                        Les principales étapes étaient de modéliser le système, d'établir les équations du mouvement, de réaliser les calculs avec Python, de simuler la trajectoire et d'analyser les résultats.
+                        L’objectif était de <span class="highlight">modéliser</span> le mouvement de la voiture à l’aide des <span class="highlight">lois de la mécanique</span>, puis de <span class="highlight">réaliser</span> des simulations numériques avec <span class="highlight">Python</span> et <span class="highlight">SciPy</span> afin de déterminer sa vitesse, sa trajectoire et les conditions nécessaires pour réussir le parcours.
+                        Les principales étapes étaient de <span class="highlight">modéliser</span> le système, <span class="highlight">d'établir</span> les équations du mouvement, de <span class="highlight">réaliser</span> les calculs avec <span class="highlight">Python</span>, de <span class="highlight">simuler</span> la trajectoire et <span class="highlight">d'analyser</span> les résultats.
                     </p>
                     <div class="technologies">
                         <span class="technology">Python</span>
@@ -1186,10 +1283,10 @@
                 <div class="project-content">
                     <h3>Filtre sonore, Modulation-Démodulation et Codage-Décodage</h3>
                     <p>
-                        <span class="highlight">Conception</span> d’un filtre sonore en <span class="highlight">Python</span> pour traiter un signal
-                        modulé en <span class="highlight">ASK</span> et <span>FSK</span>. Après le décodage des données binaires,
-                        nous avons traduit le code Manchester pour retrouver le message,
-                        puis codé une réponse en Manchester avant sa modulation et son
+                        <span class="highlight">Conception d’un filtre sonore en Python</span> pour traiter un signal
+                        modulé en <span class="highlight">ASK et FSK</span>. Après le <span class="highlight">décodage</span> des données binaires,
+                        nous avons traduit le <span class="highlight">code Manchester</span> pour retrouver le message,
+                        puis <span class="highlight">codé</span> une réponse en Manchester avant sa <span class="highlight">modulation</span> et son
                         envoi.
                     </p>
                     <div class="technologies">
@@ -1215,7 +1312,7 @@
                     <h3>Modélisation d’une maison sur Revit</h3>
                     <p>
                         <span>Modélisation</span> et <span>conception 3D</span> d’une maison sur Revit,
-                        accompagnées d’une étude thermique pour une <span>sélection</span> de son isolant et de son <span>besoin en chauffage</span>.
+                        accompagnées d’une <span class="highlight">étude thermique</span> pour une sélection de son <span class="highlight">isolant</span> et de son <span class="highlight">besoin en chauffage</span>.
                     </p>
                     <div class="technologies">
                         <span class="technology">Revit</span>
@@ -1253,14 +1350,14 @@
                 <div class="project-content">
                     <h3>Conception d’un objet sur Fusion 360</h3>
                     <p>
-                        <span>Modélisation</span> et <span>conception 3D</span> d’un boîtier pour protéger des composants électroniques sur Fusion 360,
-                        puis optimisation de sa conception en vue de son
-                        industrialisation.
+                        <span>Modélisation</span> et <span>conception 3D</span> d’un boîtier pour protéger des composants électroniques sur <span class="highlight">Fusion 360</span>,
+                        puis <span class="highlight">optimisation</span> de sa conception en vue de son <span class="highlight">industrialisation</span>.
                     </p>
                     <div class="technologies">
                         <span class="technology">Fusion 360</span>
                         <span class="technology">Modélisation 3D</span>
                         <span class="technology">Industrialisation</span>
+                        <span class="technology">Optimisation</span>
                     </div>
                 </div>
             </article>
@@ -1274,9 +1371,9 @@
                     <h3>Station Météo embarquée sur un navire</h3>
 
                     <p>
-                        Le projet consistait à développer un <span>système d’acquisition et d’enregistrement de données</span> provenant de capteurs.
-                        L'objectif était de gérer les différents modes de fonctionnement du système et assurer la collecte et le stockage des données.
-                        Les étapes principales étaient d'analyser le fonctionnement, programmer les modes, gérer les boutons et capteurs, enregistrer les données sur carte SD, puis tester le système.
+                        Le projet consistait à <span class="highlight">développer un système d’acquisition et d’enregistrement de données</span> provenant de capteurs.
+                        L'objectif était de gérer les différents modes de fonctionnement du système et assurer la <span class="highlight">collecte et le stockage des données</span>.
+                        Les étapes principales étaient <span class="highlight">d'analyser</span> le fonctionnement, <span class="highlight">programmer</span> les modes, <span class="highlight">gérer</span> les boutons et capteurs, <span class="highlight">enregistrer</span> les données sur carte SD, puis <span class="highlight">tester</span> le système.
                     </p>
 
                     <div class="technologies">
@@ -1362,15 +1459,15 @@
                 <article class="timeline-item">
 
                     <div class="timeline-date">
-                        2025 — Aujourd'hui
+                        <span class="highlight">2025 — Aujourd'hui</span>
                     </div>
 
                     <h3>
-                        CESI — École d'ingénieurs
+                        <span class="highlight">CESI</span> — École d'ingénieurs
                     </h3>
 
                     <p>
-                        Deuxième année — spécialité Informatique.
+                        <span class="highlight">Deuxième année</span> — spécialité Informatique.
                         Développement, systèmes, réseaux,
                         algorithmique et projets techniques.
                     </p>
@@ -1381,11 +1478,11 @@
                 <article class="timeline-item">
 
                     <div class="timeline-date">
-                        2025
+                        <span class="highlight">2025</span>
                     </div>
 
                     <h3>
-                        Baccalauréat général — Mention Bien
+                        <span class="highlight">Baccalauréat général</span> — Mention Bien
                     </h3>
 
                     <p>
@@ -1400,11 +1497,11 @@
                 <article class="timeline-item">
 
                     <div class="timeline-date">
-                        Aujourd'hui
+                        <span class="highlight">Aujourd'hui</span>
                     </div>
 
                     <h3>
-                        Objectif professionnel
+                        <span class="highlight">Objectif professionnel</span>
                     </h3>
 
                     <p>
@@ -1420,6 +1517,29 @@
 
         </section>
 
+        <section id="cv" aria-labelledby="cv-title">
+            <div class="section-header">
+                <div class="section-number">05 — CV</div>
+                <h2 id="cv-title">Mon curriculum vitæ</h2>
+            </div>
+
+            <div class="cv-content">
+                <p>
+                    Consultez mon parcours, mes compétences et mes expériences
+                    dans mon CV.
+                </p>
+
+                <div class="cv-actions">
+                    <a href="cv.html" class="button primary" target="_blank">
+                        Voir mon CV
+                    </a>
+                    <a href="assets/CV_Stage_2.pdf" class="button" download="CV_Arthur_AUthier.pdf">
+                        T&#233;l&#233;charger mon CV
+                    </a>
+                </div>
+
+            </div>
+        </section>
 
         <!-- =====================================================
              CONTACT
@@ -1428,7 +1548,7 @@
         <section id="contact" class="contact">
 
             <div class="section-number">
-                05 — CONTACT
+                06 — CONTACT
             </div>
 
             <h2>
@@ -1479,11 +1599,11 @@
     <footer>
 
         <span>
-            © 2026 Arthur AUTHIER
+            <span class="highlight">© 2026 Arthur AUTHIER</span>
         </span>
 
         <span>
-            Étudiant ingénieur · Informatique · Cybersécurité
+            <span class="highlight">Étudiant ingénieur · Informatique · Cybersécurité</span>
         </span>
 
     </footer>
@@ -1972,6 +2092,29 @@
     <a class="back-to-top" href="#top" aria-label="Remonter en haut de la page" title="Remonter en haut">
         ↑
     </a>
+
+    <script>
+        const menuToggle = document.querySelector(".menu-toggle");
+        const mainMenu = document.querySelector("#main-menu");
+
+        menuToggle.addEventListener("click", () => {
+            const isOpen = mainMenu.classList.toggle("is-open");
+
+            menuToggle.setAttribute("aria-expanded", isOpen);
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Fermer le menu" : "Ouvrir le menu"
+            );
+        });
+
+        mainMenu.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                mainMenu.classList.remove("is-open");
+                menuToggle.setAttribute("aria-expanded", "false");
+                menuToggle.setAttribute("aria-label", "Ouvrir le menu");
+            });
+        });
+    </script>
 
 </body>
 </html>
