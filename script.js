@@ -32,7 +32,7 @@ if (reduceMotion) {
 
 } else if (
     !window.WebGLRenderingContext ||
-    !THREE
+    typeof THREE === "undefined"
 ) {
 
     canvas.style.display = "none";
